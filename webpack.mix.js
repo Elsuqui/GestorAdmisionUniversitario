@@ -13,3 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
+
+mix.styles(["resources/css/main.css", "resources/css/util.css"], "public/css/login_styles.css");
+mix.copy("resources/img/", "public/imagenes/");
+mix.copy("resources/fonts/montserrat", "public/fonts/montserrat");

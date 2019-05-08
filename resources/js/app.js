@@ -5,7 +5,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
 
 window.Vue = require('vue');
 
@@ -20,13 +19,24 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//Vue.component('IndexPrincipal', () => import("./modulos/principal/paginas/_index"));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+/**
+ * Cargamos Element Ui como framework de componentes para Vue js
+ */
+
+import ElementUI from "element-ui";
+import 'element-ui/lib/theme-chalk/index.css';
+import "./modulos/main";
+
+Vue.use(ElementUI);
+
 
 const app = new Vue({
     el: '#app'
