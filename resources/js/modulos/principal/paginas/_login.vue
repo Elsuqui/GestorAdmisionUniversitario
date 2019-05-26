@@ -9,11 +9,11 @@
                     </div>
 
                     <span class="login100-form-title p-t-20 p-b-45">
-						Irvin Rios
+						USUARIO
 					</span>
 
                     <div class="wrap-input100 validate-input m-b-10" data-validate = "Username is required">
-                        <input class="input100" type="text" name="username" placeholder="Usuario">
+                        <input v-model="username" class="input100" type="text" name="username" placeholder="Usuario">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
 							<i class="fa fa-user"></i>
@@ -21,15 +21,26 @@
                     </div>
 
                     <div class="wrap-input100 validate-input m-b-10" data-validate = "Password is required">
-                        <input class="input100" type="password" name="pass" placeholder="Contraseña">
+                        <input v-model="password" class="input100" type="password" name="password" placeholder="Contraseña">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
 							<i class="fa fa-lock"></i>
 						</span>
                     </div>
 
+                    <el-alert
+                        v-if="error_message !== ''"
+                        title="Usuario o clave incorrecta!"
+                        type="error"
+                        :description="error_message"
+                        show-icon
+                        @close="error_message = ''">
+                    </el-alert>
+
                     <div class="container-login100-form-btn p-t-10">
-                        <button class="login100-form-btn">
+                        <button class="login100-form-btn"
+                                @click="login"
+                                type="button">
                             Ingresar
                         </button>
                     </div>
@@ -53,8 +64,38 @@
 </template>
 
 <script>
+    import apiLogin from "../../../api/usuario";
+
     export default {
 
+        components: {
+          ElAlert: () => import("element-ui/lib/alert")
+        },
+
+        data(){
+            return {
+                username: "",
+                password: "",
+                remember: false,
+                error_message: "",
+            }
+        },
+
+        methods: {
+            async login(){
+               let response = await apiLogin.iniciar_sesion({
+                   username: this.username,
+                   password: this.password,
+                   remember: this.remember
+               });
+
+               if(response.success){
+                   window.location.href = response.redirect;
+               }else{
+                   this.error_message = "Error al ingresar al sistema";
+               }
+            }
+        }
     }
 </script>
 

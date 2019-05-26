@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,45 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    /**
+     * Sobre escribo el método para seleccionar el campo de autenticación
+     * en este caso nombre del usuario
+     */
+    public function username()
+    {
+        return "username";
+    }
+
+    /**
+     * Método para iniciar sesión
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ingresar(Request $request)
+    {
+        $error = "";
+        $remember = $request["remember"];
+        try{
+            $success = Auth::attempt($request->only(["username", "password"]), $remember);
+        }catch(\Exception $exception){
+            $error = $exception->getMessage();
+        }
+
+        return response()->json([
+            "success" => $success,
+            "redirect" => $success ? $this->redirectTo : "",
+            "error" => $error
+            ]);
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->flush();
+        $request->session()->regenerate();
+
+        return redirect("/login");
     }
 }

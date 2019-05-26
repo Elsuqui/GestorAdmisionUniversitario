@@ -34,7 +34,44 @@
             </el-menu>
         </el-aside>
         <el-container>
-            <el-header>
+            <el-header class="header">
+                <el-row>
+                    <el-col :span="8" style="padding-top: 10px;">
+                        <!--<el-button
+                            :icon="acortar ? 'el-icon-caret-rigth' : 'el-icon-caret-left'"
+                            @click="acortar = !acortar">
+                        </el-button>-->
+                    </el-col>
+                    <el-col :span="8">
+                        <div class="title">
+                            SISTEMA GESTOR DE ADMISIÓN UNIVERSITARIA
+                        </div>
+                    </el-col>
+                    <el-col :span="8" style="text-align: right;">
+                        <el-dropdown @command="eventoOpciones">
+                            <el-image
+                                id="imagen-perfil"
+                                style="width: 50px; height: 50px;"
+                                :src="imagen_perfil"
+                                fit="contain"></el-image>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item
+                                    icon="el-icon-close"
+                                    :command="1">
+                                    <form style="display: none;"
+                                          action="/logout"
+                                          method="POST"
+                                          ref="formulario">
+                                        <input type="hidden" name="_token" :value="csrf">
+                                    </form>
+                                    Cerrar Sesión
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <!--<el-header>
                 <el-row type="flex" class="row-bg" justify="space-between">
                     <el-col :span="9">
                         <div class="grid-content bg-purple" style="font-size: 20px;">
@@ -43,7 +80,7 @@
                     </el-col>
                     <el-col :span="9"><div class="grid-content bg-purple-light"></div></el-col>
                 </el-row>
-            </el-header>
+            </el-header>-->
             <el-main>Principal</el-main>
         </el-container>
     </el-container>
@@ -54,7 +91,9 @@
         //name: "_index",
         data(){
             return {
-                acortar: false
+                acortar: false,
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                imagen_perfil: "https://sudamericarural.org/images/concurso/2017/concursantes/people.png"
             }
         },
         methods:{
@@ -63,13 +102,46 @@
             },
             acortarMenu(){
 
+            },
+            eventoOpciones(evento){
+                switch(evento){
+                    case 1:
+                        this.$refs.formulario.submit();
+                        break;
+                }
             }
         }
     }
 </script>
 
-<style scoped>
+<style>
     .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
         min-height: 100vh;
+        max-height: 100vh;
+    }
+
+    .el-menu-vertical-demo.el-menu--collapse.el-menu{
+        width: 100px;
+        min-height: 100vh;
+        max-height: 100vh;
+    }
+
+    .header{
+        vertical-align: middle;
+        font-size: 20px;
+        background-color: darkred;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    }
+
+    .title{
+        padding-top: 15px;
+        text-align: center;
+        width: 500px;
+    }
+
+    .el-image__inner{
+        border-radius: 50% !important;
     }
 </style>

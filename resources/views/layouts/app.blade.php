@@ -16,7 +16,7 @@
     @yield("css")
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 </head>
 <body style="padding: 0px; margin: 0px;">
     <div id="app">
