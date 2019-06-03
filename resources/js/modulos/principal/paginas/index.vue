@@ -2,7 +2,7 @@
     <el-container>
         <el-aside width="200px" id="barra_lateral">
             <!--Aquí se agrega el menú de la página-->
-            <el-menu default-active="1"
+            <el-menu default-active="0"
                      class="el-menu-vertical-demo"
                      @open="abrirMenu"
                      @close="acortarMenu"
@@ -10,12 +10,14 @@
                      background-color="#545c64"
                      text-color="#fff"
                      active-text-color="#ffd04b">
-                <el-image
-                    style="width: 100%; height: 100px;"
-                    :src="'/imagenes/logo.png'"
-                    :fit="'scale-down'">
-                </el-image>
-                <el-menu-item index="1">
+                <el-menu-item index="0" @click="$router.push({ path: '/home' })" style="height: 100px;">
+                    <el-image
+                        style="width: 100%; padding-top: 15%;"
+                        :src="'/imagenes/logo.png'"
+                        :fit="'scale-down'">
+                    </el-image>
+                </el-menu-item>
+                <el-menu-item index="1" @click="$router.push({ name: 'index-archivos' })">
                     <i class="el-icon-document"></i>
                     <span>Subir archivo excel</span>
                 </el-menu-item>
@@ -36,18 +38,18 @@
         <el-container>
             <el-header class="header">
                 <el-row>
-                    <el-col :span="8" style="padding-top: 10px;">
+                    <el-col :span="8" >
                         <!--<el-button
                             :icon="acortar ? 'el-icon-caret-rigth' : 'el-icon-caret-left'"
                             @click="acortar = !acortar">
                         </el-button>-->
                     </el-col>
                     <el-col :span="8">
-                        <div class="title">
+                        <!--<div class="title">
                             SISTEMA GESTOR DE ADMISIÓN UNIVERSITARIA
-                        </div>
+                        </div>-->
                     </el-col>
-                    <el-col :span="8" style="text-align: right;">
+                    <el-col style="text-align: right;">
                         <el-dropdown @command="eventoOpciones">
                             <el-image
                                 id="imagen-perfil"
@@ -81,7 +83,10 @@
                     <el-col :span="9"><div class="grid-content bg-purple-light"></div></el-col>
                 </el-row>
             </el-header>-->
-            <el-main>Principal</el-main>
+            <el-main>
+                <seguidor-ruta :ruta="$route.path"></seguidor-ruta>
+                <router-view></router-view>
+            </el-main>
         </el-container>
     </el-container>
 </template>
@@ -89,6 +94,9 @@
 <script>
     export default {
         //name: "_index",
+        components:{
+          SeguidorRuta: () => import("../componentes/SeguidorRutaComponent")
+        },
         data(){
             return {
                 acortar: false,
