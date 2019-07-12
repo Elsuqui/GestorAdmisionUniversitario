@@ -25,14 +25,12 @@ Route::post("/ingresar", "Auth\LoginController@ingresar")->name("ingresar");
 Route::middleware(["web", "auth"])->group(function (){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post("/salir", "Auth\LoginController@logout")->name("salir");
-
     // Rutas para los contenedores principales de módulos
-    /*Route::get("/{any}", function (){
-        return view("home");
-    })->where("any", "^(?!login|ingresar|register|salir)$");*/
-   /* Route::get("/{any}", function (){
-        return view("home");
-    })->where("any", ".*");*/
+    /*Route::get("/{any}")
+        ->where("any", "^(?!login|ingresar|register|salir)$");*/
+   Route::get("/{any}", "HomeController@index")
+       ->where("any", ".*")
+       ->where("any", "^(?!api).*$");
 });
 
 

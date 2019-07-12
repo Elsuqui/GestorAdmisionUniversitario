@@ -11,6 +11,30 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig(webpack => {
+    return {
+        plugins: [
+            new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/es')
+        ],
+        resolve: {
+            alias: {
+                '@components': path.resolve(
+                    __dirname,
+                    'resources/js/components'
+                ),
+                '@api': path.resolve(
+                    __dirname,
+                    'resources/js/api'
+                )
+            }
+        },
+        output: {
+            chunkFilename: `chunks/chunk[name].js`
+        }
+    };
+});
+
+
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
 

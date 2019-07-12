@@ -20,6 +20,8 @@ class CreateInteresesTable extends Migration
             $table->unsignedBigInteger("id_origen");
             $table->unsignedBigInteger("id_usuario_creador");
             $table->unsignedBigInteger("id_usuario_editor")->nullable();
+            $table->unsignedBigInteger("estado_interes")->default(1)
+                ->comment("El estado de interes que indica si no ha sido notificado, le interesa o no");
             $table->timestamps();
         });
 

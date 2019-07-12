@@ -16,6 +16,7 @@ class CreateOrigenesTable extends Migration
         Schema::create('origenes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger("id_tipo_origen");
+            $table->string("nombre");
             $table->boolean("estado")->default(true);
             $table->unsignedBigInteger("id_usuario_creador");
             $table->unsignedBigInteger("id_usuario_editor")->nullable();

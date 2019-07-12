@@ -17,6 +17,7 @@ class CreateContactosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger("id_persona");
             $table->unsignedBigInteger("id_tipo_contacto");
+            $table->string("valor");
             $table->boolean("estado")->default(true);
             $table->unsignedBigInteger("id_usuario_creador");
             $table->unsignedBigInteger("id_usuario_editor")->nullable();

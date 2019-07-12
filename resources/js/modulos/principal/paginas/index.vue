@@ -2,7 +2,7 @@
     <el-container>
         <el-aside width="200px" id="barra_lateral">
             <!--Aquí se agrega el menú de la página-->
-            <el-menu default-active="0"
+            <el-menu :default-active="$route.meta.opcion_menu"
                      class="el-menu-vertical-demo"
                      @open="abrirMenu"
                      @close="acortarMenu"
@@ -21,17 +21,21 @@
                     <i class="el-icon-document"></i>
                     <span>Subir archivo excel</span>
                 </el-menu-item>
-                <el-menu-item index="2">
-                    <i class="el-icon-s-claim"></i>
-                    <span>Reporte de Admisión</span>
-                </el-menu-item>
-                <el-menu-item index="3">
+                <el-menu-item index="2" @click="$router.push({ name: 'index-mail' })">
                     <i class="el-icon-message"></i>
                     <span>Envío de mail</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="3">
                     <i class="el-icon-phone"></i>
                     <span>Control de llamadas</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                    <i class="el-icon-s-claim"></i>
+                    <span>Reporte de Admisión</span>
+                </el-menu-item>
+                <el-menu-item index="5">
+                    <i class="el-icon-s-claim"></i>
+                    <span>Historico de Admisiones</span>
                 </el-menu-item>
             </el-menu>
         </el-aside>

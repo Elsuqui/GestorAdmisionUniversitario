@@ -55,6 +55,12 @@ return [
             'visibility' => 'public',
         ],
 
+        // Disco privado para guardar los archivos importados en excel
+        'archivos_excel' => [
+            'driver' => 'local',
+            'root' => storage_path('app/importaciones/excel')
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

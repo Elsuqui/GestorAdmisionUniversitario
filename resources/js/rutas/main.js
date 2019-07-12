@@ -8,6 +8,7 @@ Vue.use(Router);
 // Importo las rutas de los módulos
 import archivos from "../rutas/modulos/archivos";
 import reportes from "../rutas/modulos/reportes";
+import mail from "../rutas/modulos/mail";
 
 // Instancio el objeto ruteador con las rutas definidas
 const router = new Router({
@@ -20,6 +21,7 @@ const router = new Router({
           props: false
         },
         archivos,
+        mail,
         reportes
     ]
 });
