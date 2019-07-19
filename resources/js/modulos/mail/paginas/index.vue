@@ -41,7 +41,9 @@
                     fixed="right"
                     label="Operaciones">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="enviarMailInformativo(scope.row)" icon="el-icon-message">Enviar correo</el-button>
+                        <div v-for="interes in scope.row.intereses">
+                            <el-button v-show="obtenerEnum(interes.estado_interes) === 'Sin Notificar'" size="small" @click="enviarMailInformativo(scope.row)" icon="el-icon-message">Enviar correo</el-button>
+                        </div>
                     </template>
                 </el-table-column>
                 <template slot="empty">
@@ -82,6 +84,11 @@
             },
             async enviarMailInformativo(interes){
                 let { data } = await apiMail.enviarMailInformativo(interes);
+                this.actualizarTabla();
+            },
+            async actualizarTabla(){
+                let { data } = await apiMail.listadoPersonasInteresadas();
+                this.listado = data;
             }
         }
     }

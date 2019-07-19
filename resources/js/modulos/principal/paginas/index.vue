@@ -17,23 +17,27 @@
                         :fit="'scale-down'">
                     </el-image>
                 </el-menu-item>
-                <el-menu-item index="1" @click="$router.push({ name: 'index-archivos' })">
+                <el-menu-item index="1" @click="$router.push({ name: 'index-admision' })">
+                    <i class="el-icon-circle-plus-outline"></i>
+                    <span>Nuevo interesado</span>
+                </el-menu-item>
+                <el-menu-item index="2" @click="$router.push({ name: 'index-archivos' })">
                     <i class="el-icon-document"></i>
                     <span>Subir archivo excel</span>
                 </el-menu-item>
-                <el-menu-item index="2" @click="$router.push({ name: 'index-mail' })">
+                <el-menu-item index="3" @click="$router.push({ name: 'index-mail' })">
                     <i class="el-icon-message"></i>
                     <span>Envío de mail</span>
                 </el-menu-item>
-                <el-menu-item index="3">
+                <el-menu-item index="4">
                     <i class="el-icon-phone"></i>
                     <span>Control de llamadas</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="5">
                     <i class="el-icon-s-claim"></i>
                     <span>Reporte de Admisión</span>
                 </el-menu-item>
-                <el-menu-item index="5">
+                <el-menu-item index="6">
                     <i class="el-icon-s-claim"></i>
                     <span>Historico de Admisiones</span>
                 </el-menu-item>

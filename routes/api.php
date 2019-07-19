@@ -28,3 +28,8 @@ Route::prefix("v1/mail")
     ->namespace('Api\v1\Mail')
     ->as('api.v1.mail.')
     ->group(base_path('routes/api/v1/mail/mail.php'));
+
+Route::prefix("v1/admision")
+    ->namespace('Api\v1\Admision')
+    ->as('api.v1.admision.')
+    ->group(base_path('routes/api/v1/admision/admision.php'));

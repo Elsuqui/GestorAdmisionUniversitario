@@ -6,6 +6,7 @@ import Vue from "vue";
 Vue.use(Router);
 
 // Importo las rutas de los módulos
+import admision from "../rutas/modulos/admision";
 import archivos from "../rutas/modulos/archivos";
 import reportes from "../rutas/modulos/reportes";
 import mail from "../rutas/modulos/mail";
@@ -20,6 +21,7 @@ const router = new Router({
           name: "index-principal",
           props: false
         },
+        admision,
         archivos,
         mail,
         reportes

@@ -14,10 +14,6 @@ class ArchivosController extends Controller
 {
     //
     public function subirExcelBase(Request $request){
-        //$nombre_archivo = Carbon::now()->format("Y_m_d\TH_i", $request->file());
-        //dump($request->file("file"));
-        //dd($nombre_archivo, $request->file()->getFilename());
-        //Storage::disk("archivos_excel")->put( . "")
         try{
             Excel::import(new InteresadosImport(Auth::id()), $request->file("file"));
             return [
@@ -31,6 +27,5 @@ class ArchivosController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-
     }
 }

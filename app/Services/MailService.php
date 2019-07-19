@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\EstadosInteres;
+use App\Interes;
 use App\Mail\EmailInformativo;
 use App\Repository\PersonaRepository;
 use Exception;
@@ -19,16 +21,19 @@ class MailService
     }
 
     public function reportePersonasInteresadas(){
-        return $this->personaRepository->listado([
+        /*return $this->personaRepository->listado([
             "contactos.tipoContacto",
             "intereses.carrera.facultad"
         ])->with(["intereses" => function(HasMany $query){
             $query->where("estado_interes", "=", 1);
-        }])->get();
+        }])->get();*/
+        return $this->personaRepository->listado([
+            "contactos.tipoContacto",
+            "intereses.carrera.facultad"
+        ])->with(["intereses"])->get();
     }
 
     public function enviarEmailInformativo(Collection $interes){
-
         $contactos = collect($interes["contactos"])->filter(function ($contacto){
             return $contacto["tipo_contacto"]["id"] == 3;
         })->values();
@@ -42,6 +47,9 @@ class MailService
                         "carrera" => $interes_obj["carrera"]["nombre"],
                         "facultad" => $interes_obj["carrera"]["facultad"]["nombre"]
                     ]));
+                    $interes_temp = Interes::query()->findOrFail($interes_obj["id"]);
+                    $interes_temp["estado_interes"] = EstadosInteres::NOTIFICADO;
+                    $interes_temp->save();
 
                 }catch(Exception $exception){
                     return dd($exception->getMessage());
