@@ -19,4 +19,8 @@ class Llamada extends Model
         "utlima_llamada",
         "id_usuario_creador"
     ];
+
+    public function usuario_llamada(){
+        return $this->belongsTo(User::class, "id_usuario_llamada");
+    }
 }

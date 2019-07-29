@@ -1,9 +1,18 @@
 <template>
     <panel titulo="Formulario de registro nuevo interesado">
         <div slot="content">
-            <el-form ref="form" :rules="reglas" :model="form" label-width="120px" size="mini">
-                <el-form-item label="Nombres" prop="nombres">
-                    <el-input v-model="form.nombres"></el-input>
+            <el-form ref="form" status-icon :rules="reglas" :model="form" label-width="120px" size="mini">
+                <el-form-item>
+                    <el-col :span="10">
+                        <el-form-item label="Cédula" prop="cedula">
+                            <el-input v-model="form.cedula"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-form-item label="Nombres" prop="nombres">
+                            <el-input v-model="form.nombres"></el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="Unidad Educativa" prop="colegio">
                     <el-input v-model="form.colegio"></el-input>
@@ -66,6 +75,7 @@
             return {
                 form: {
                     nombres: "",
+                    cedula: "",
                     colegio: "",
                     telconv: "",
                     telcel: "",
@@ -76,6 +86,10 @@
                 reglas: {
                     nombres: [
                         { required: true, message: 'Debe ingresar un nombre', trigger: 'blur' }
+                    ],
+                    cedula: [
+                        { required: true, message: 'Debe ingresar la cédula', trigger: 'blur' },
+                        { min: 10, message: 'La cédula debe tener mínimo 10 dígitos' }
                     ],
                     colegio: [
                         { required: true, message: 'Debe ingresar un colegio', trigger: 'blur' }

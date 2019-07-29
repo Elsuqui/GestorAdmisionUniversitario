@@ -17,10 +17,10 @@
                         :fit="'scale-down'">
                     </el-image>
                 </el-menu-item>
-                <el-menu-item index="1" @click="$router.push({ name: 'index-admision' })">
+                <router-link index="1" tag="el-menu-item" :to="{ name: 'index-admision' }">
                     <i class="el-icon-circle-plus-outline"></i>
                     <span>Nuevo interesado</span>
-                </el-menu-item>
+                </router-link>
                 <el-menu-item index="2" @click="$router.push({ name: 'index-archivos' })">
                     <i class="el-icon-document"></i>
                     <span>Subir archivo excel</span>
@@ -29,7 +29,7 @@
                     <i class="el-icon-message"></i>
                     <span>Envío de mail</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="4" @click="$router.push({ name: 'index-llamadas' })">
                     <i class="el-icon-phone"></i>
                     <span>Control de llamadas</span>
                 </el-menu-item>

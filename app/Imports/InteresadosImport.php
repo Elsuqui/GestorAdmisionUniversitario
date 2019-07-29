@@ -35,6 +35,7 @@ class InteresadosImport implements ToCollection, WithHeadingRow
             if($row->filter()->isNotEmpty()){
                 // Primero creo a la persona
                 $persona = Persona::query()->firstOrCreate([
+                    "cedula" => $row["cedula"],
                     "nombres" => $row["nombres"],
                     "colegio" => $row["unidad_educativa"]
                 ], ["id_usuario_creador" => $this->usuario]);

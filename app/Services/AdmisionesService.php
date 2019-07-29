@@ -25,4 +25,8 @@ class AdmisionesService
 
         return $interes;
     }
+
+    public function cambiarEstadoInteres(Request $request){
+        return $this->admisionRepository->cambiarEstadoInteres($request->all());
+    }
 }

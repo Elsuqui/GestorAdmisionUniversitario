@@ -20,7 +20,7 @@ class PersonaRepository
         return $this->persona->query();
     }
 
-    public function listado(array $relations){
+    public function listado(array $relations = []){
         if(count($relations) > 0){
             // Se consulta con relaciones
            return $this->query()

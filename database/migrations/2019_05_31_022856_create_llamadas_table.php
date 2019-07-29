@@ -18,11 +18,12 @@ class CreateLlamadasTable extends Migration
             $table->unsignedBigInteger("id_interesado");
             $table->unsignedBigInteger("id_usuario_llamada");
             $table->unsignedBigInteger("orden");
-            $table->time("inicio_llamada");
-            $table->time("fin_llamada");
+            $table->time("inicio_llamada")->nullable();
+            $table->time("fin_llamada")->nullable();
             $table->date("fecha_llamada");
             $table->enum("respuesta", ["SI", "NO", "MAS TARDE"]);
             $table->boolean("ultima_llamada")->default(true);
+            $table->string("observacion")->nullable();
             $table->unsignedBigInteger("id_usuario_creador");
             $table->unsignedBigInteger("id_usuario_editor")->nullable();
             $table->timestamps();

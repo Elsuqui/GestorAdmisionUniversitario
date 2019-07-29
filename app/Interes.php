@@ -22,4 +22,8 @@ class Interes extends Model
     public function origen(){
         return $this->belongsTo(Origen::class, "id_origen");
     }
+
+    public function llamadas(){
+        return $this->hasMany(Llamada::class, "id_interesado");
+    }
 }

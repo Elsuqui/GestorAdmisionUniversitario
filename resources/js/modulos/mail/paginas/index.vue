@@ -6,7 +6,8 @@
                       size="medium">
                 <el-table-column prop="" label="Interesado">
                         <template slot-scope="scope">
-                            {{ scope.row.nombres }}
+                            {{ scope.row.nombres }}<br/>
+                            <el-tag size="mini">{{ scope.row.cedula }}</el-tag>
                         </template>
                 </el-table-column>
                 <el-table-column label="Contactos">
@@ -42,7 +43,7 @@
                     label="Operaciones">
                     <template slot-scope="scope">
                         <div v-for="interes in scope.row.intereses">
-                            <el-button v-show="obtenerEnum(interes.estado_interes) === 'Sin Notificar'" size="small" @click="enviarMailInformativo(scope.row)" icon="el-icon-message">Enviar correo</el-button>
+                            <el-button size="small" @click="enviarMailInformativo(scope.row)" icon="el-icon-message">Enviar correo</el-button>
                         </div>
                     </template>
                 </el-table-column>

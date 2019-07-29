@@ -33,3 +33,13 @@ Route::prefix("v1/admision")
     ->namespace('Api\v1\Admision')
     ->as('api.v1.admision.')
     ->group(base_path('routes/api/v1/admision/admision.php'));
+
+Route::prefix("v1/personas")
+    ->namespace('Api\v1\Persona')
+    ->as('api.v1.persona')
+    ->group(base_path('routes/api/v1/personas/personas.php'));
+
+Route::prefix("v1/llamadas")
+    ->namespace('Api\v1\Llamada')
+    ->as('api.v1.llamada')
+    ->group(base_path('routes/api/v1/llamadas/llamadas.php'));

@@ -22,4 +22,8 @@ class AdmisionController extends Controller
             dd($exception->getMessage());
         }
     }
+
+    public function cambiarEstadoInteres(Request $request){
+        return response()->json($this->admisionService->cambiarEstadoInteres($request));
+    }
 }

@@ -1,8 +1,9 @@
 const estados  = {
     1: "Sin Notificar",
     2: "Notificado",
-    3: "Aceptado",
-    4: "Rechazado"
+    3: "Interesado",
+    4: "No Interesado",
+    5: "Inscrito"
 };
 
 export default {

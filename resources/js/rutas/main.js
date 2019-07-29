@@ -10,6 +10,7 @@ import admision from "../rutas/modulos/admision";
 import archivos from "../rutas/modulos/archivos";
 import reportes from "../rutas/modulos/reportes";
 import mail from "../rutas/modulos/mail";
+import llamadas from "../rutas/modulos/llamadas";
 
 // Instancio el objeto ruteador con las rutas definidas
 const router = new Router({
@@ -24,7 +25,8 @@ const router = new Router({
         admision,
         archivos,
         mail,
-        reportes
+        reportes,
+        llamadas
     ]
 });
 

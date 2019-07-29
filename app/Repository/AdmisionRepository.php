@@ -11,12 +11,24 @@ use App\Interes;
 use App\Persona;
 use App\TipoContacto;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdmisionRepository
 {
+    protected $interes;
+    public function __construct(Interes $interes)
+    {
+        $this->interes = $interes;
+    }
+
+    public function query(){
+        return $this->interes->query();
+    }
+
     public function guardarNuevoInteres(array $datos){
         // Primero creo a la persona
         $persona = Persona::query()->firstOrCreate([
+            "cedula" => $datos["cedula"],
             "nombres" => $datos["nombres"],
             "colegio" => $datos["colegio"]
         ], ["id_usuario_creador" => Auth::id()]);
@@ -57,9 +69,23 @@ class AdmisionRepository
         $interes = Interes::query()->firstOrCreate([
             "id_persona" => $persona->id,
             "id_carrera" => $carrera->id,
-            "id_origen" => 1,
+            "id_origen" => Auth::user()->id_origen,
         ], ["id_usuario_creador" => Auth::id()]);
 
         return $interes;
+    }
+
+    public function cambiarEstadoInteres(array $datos){
+        try{
+            DB::beginTransaction();
+            $interes = $this->query()->findOrFail($datos["interes"]);
+            $interes->estado_interes = $datos["estado"];
+            $respuesta = $interes->saveOrFail();
+            DB::commit();
+            return $respuesta;
+        }catch(\Exception $exception){
+            DB::rollBack();
+            return false;
+        }
     }
 }

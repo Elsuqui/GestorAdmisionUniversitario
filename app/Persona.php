@@ -9,6 +9,7 @@ class Persona extends Model
     //
     protected $table = "personas";
     protected $fillable = [
+        "cedula",
         "nombres",
         "colegio",
         "estado",

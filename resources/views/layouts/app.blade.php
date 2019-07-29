@@ -12,7 +12,13 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+    <style>
+        * {
+            font-size: 13px;
+            /*font-family: 'Marker Felt';*/
+            font-family: 'Arial Narrow';
+        }
+    </style>
     @yield("css")
 
     <!-- Styles -->
