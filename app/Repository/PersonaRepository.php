@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 
+use App\Interes;
 use App\Persona;
 
 class PersonaRepository
@@ -20,6 +21,10 @@ class PersonaRepository
         return $this->persona->query();
     }
 
+    /**
+     * @param array $relations
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function listado(array $relations = []){
         if(count($relations) > 0){
             // Se consulta con relaciones
@@ -31,4 +36,12 @@ class PersonaRepository
                 ->where("estado", "=", true);
         }
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function interesados(){
+        return Interes::query();
+    }
+
 }

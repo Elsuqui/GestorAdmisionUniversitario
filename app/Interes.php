@@ -26,4 +26,12 @@ class Interes extends Model
     public function llamadas(){
         return $this->hasMany(Llamada::class, "id_interesado");
     }
+
+    public function persona(){
+        return $this->belongsTo(Persona::class, "id_persona");
+    }
+
+    public function ultima_llamada(){
+        return $this->hasOne(Llamada::class, "id_interesado")->latest();
+    }
 }

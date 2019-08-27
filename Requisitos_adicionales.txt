@@ -1,0 +1,12 @@
+********* Formulario de registro *******************
+Poner el titulo de la ventana como: Gestion Admision Universitaria.
+Poner un selector para escoger entre cedula o pasaporte.
+Poner un placeholder para poder identificar que debe ingresar apellidos - nombres.
+Validar los campos del formulario de registro.
+
+********* Envío de email ******************* 
+No ha sido enviado el correo: 
+Rojo pastel solo en el campo estado.
+Cuando se ha enviado el correo:
+Verde pastel solo en el campo estado.
+Filtrar por fecha.

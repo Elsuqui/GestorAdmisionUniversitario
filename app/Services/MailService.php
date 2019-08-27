@@ -8,6 +8,7 @@ use App\Mail\EmailInformativo;
 use App\Repository\PersonaRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,17 +21,38 @@ class MailService
         $this->personaRepository = $personaRepository;
     }
 
-    public function reportePersonasInteresadas(){
+    public function reportePersonasInteresadas(Request $request){
         /*return $this->personaRepository->listado([
             "contactos.tipoContacto",
             "intereses.carrera.facultad"
         ])->with(["intereses" => function(HasMany $query){
             $query->where("estado_interes", "=", 1);
         }])->get();*/
-        return $this->personaRepository->listado([
+
+        $listado = $this->personaRepository->listado([
             "contactos.tipoContacto",
             "intereses.carrera.facultad"
-        ])->with(["intereses"])->get();
+        ])->whereHas("intereses", function ($query){
+            $query->where(function ($condicion){
+                $condicion->where("estado_interes", "=", EstadosInteres::SIN_NOTIFICAR)
+                    ->orWhere("estado_interes", "=", EstadosInteres::NOTIFICADO);
+            });
+        });
+
+        if($request->has("q")){
+            if($request->get("q")){
+                $busqueda = $request->get("q");
+                $listado = $listado->where(function($condicion) use ($busqueda){
+                    $condicion->where("nombres", "like", '%' . $busqueda . '%')
+                        ->orWhere("cedula", "like", $busqueda . '%');
+                });
+            }
+        }
+
+        $listado = $listado->whereDate("created_at", ">=", $request->get("fecha_desde"))
+            ->whereDate("created_at", "<=", $request->get("fecha_hasta"));
+
+        return $listado->with(["intereses"])->get();
     }
 
     public function enviarEmailInformativo(Collection $interes){

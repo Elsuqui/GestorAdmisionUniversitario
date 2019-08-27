@@ -15,8 +15,8 @@ class MailController extends Controller
     }
 
 
-    public function personasInteresadas(){
-        return response()->json($this->mailService->reportePersonasInteresadas());
+    public function personasInteresadas(Request $request){
+        return response()->json($this->mailService->reportePersonasInteresadas($request));
     }
 
     public function enviarMailInformativo(Request $request){

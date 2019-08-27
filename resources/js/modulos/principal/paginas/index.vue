@@ -10,37 +10,37 @@
                      background-color="#545c64"
                      text-color="#fff"
                      active-text-color="#ffd04b">
-                <el-menu-item index="0" @click="$router.push({ path: '/home' })" style="height: 100px;">
+                <el-menu-item :v-show="verificarPermisos('/home')" index="0" @click="$router.push({ path: '/home' })" style="height: 100px;">
                     <el-image
                         style="width: 100%; padding-top: 15%;"
                         :src="'/imagenes/logo.png'"
                         :fit="'scale-down'">
                     </el-image>
                 </el-menu-item>
-                <router-link index="1" tag="el-menu-item" :to="{ name: 'index-admision' }">
+                <router-link :class="verificarPermisos('/admision') ? '' : 'ocultar'" index="1" tag="el-menu-item" :to="{ name: 'index-admision' }">
                     <i class="el-icon-circle-plus-outline"></i>
                     <span>Nuevo interesado</span>
                 </router-link>
-                <el-menu-item index="2" @click="$router.push({ name: 'index-archivos' })">
+                <el-menu-item :class="verificarPermisos('/archivos') ? '' : 'ocultar'" index="2" @click="$router.push({ name: 'index-archivos' })">
                     <i class="el-icon-document"></i>
                     <span>Subir archivo excel</span>
                 </el-menu-item>
-                <el-menu-item index="3" @click="$router.push({ name: 'index-mail' })">
+                <el-menu-item :class="verificarPermisos('/mail') ? '' : 'ocultar'" index="3" @click="$router.push({ name: 'index-mail' })">
                     <i class="el-icon-message"></i>
                     <span>Envío de mail</span>
                 </el-menu-item>
-                <el-menu-item index="4" @click="$router.push({ name: 'index-llamadas' })">
+                <el-menu-item :class="verificarPermisos('/llamadas') ? '' : 'ocultar'" index="4" @click="$router.push({ name: 'index-llamadas' })">
                     <i class="el-icon-phone"></i>
                     <span>Control de llamadas</span>
                 </el-menu-item>
-                <el-menu-item index="5">
+                <el-menu-item :class="verificarPermisos('/reportes') ? '' : 'ocultar'" index="5" @click="$router.push({ name: 'index-reportes' })">
                     <i class="el-icon-s-claim"></i>
                     <span>Reporte de Admisión</span>
                 </el-menu-item>
-                <el-menu-item index="6">
+                <!--<el-menu-item index="6">
                     <i class="el-icon-s-claim"></i>
                     <span>Historico de Admisiones</span>
-                </el-menu-item>
+                </el-menu-item>-->
             </el-menu>
         </el-aside>
         <el-container>
@@ -125,6 +125,9 @@
                         this.$refs.formulario.submit();
                         break;
                 }
+            },
+            verificarPermisos(ruta){
+                return (window.permisos_usuario.includes("*") || window.permisos_usuario.includes("ver-" + ruta));
             }
         }
     }
@@ -160,4 +163,9 @@
     .el-image__inner{
         border-radius: 50% !important;
     }
+
+    .ocultar{
+        display: none;
+    }
+
 </style>

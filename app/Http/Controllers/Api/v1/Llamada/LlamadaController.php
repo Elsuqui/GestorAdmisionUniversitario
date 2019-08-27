@@ -18,4 +18,8 @@ class LlamadaController extends Controller
     public function nueva(Request $request){
         return $this->llamadaService->nueva($request);
     }
+
+    public function reporteLlamadas(Request $request){
+        return $this->llamadaService->reporteLlamadas($request);
+    }
 }

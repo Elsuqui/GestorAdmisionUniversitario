@@ -2,146 +2,129 @@
     <div>
         <panel titulo="Gestión y control de llamadas" id="control_llamadas">
             <template slot="content">
+                <el-divider><i class="el-icon-s-grid"></i> INTERESADOS </el-divider>
                 <el-row>
-                    <el-col :span="8">
-                        <el-card>
-                            <template slot="header" class="clearfix">
-                                <span>Interesado</span>
-                                <el-button type="primary"
-                                           v-show="info_interesado_selected"
-                                           style="float: right; margin-top: -8px;"
-                                           icon="el-icon-plus"
-                                           size="mini" @click="abrirModalNuevaLlamada">Nueva llamada</el-button>
-                            </template>
-                            <el-select v-model="info_interesado_selected"
-                                       style="width: 100%;"
-                                       filterable
-                                       remote
-                                       value-key="id"
-                                       clearable
-                                       size="mini"
-                                       @change="historial_llamadas"
-                                       @clear="llamadas = []"
-                                       :remote-method="buscarPersona"
-                                       reserve-keyword
-                                       :loading="info_interesado_loading"
-                                       placeholder="Buscar persona...">
-                                <el-option
-                                    v-for="(item, key) in info_list_interesados"
-                                    :key="key"
-                                    :label="item.cedula + '-' + item.nombres"
-                                    :value="item">
-                                </el-option>
-                            </el-select>
-                            <br/>
-                            <div v-if="info_interesado_selected" style="margin-top: 20px;">
-                                <h4>Listado de intereses</h4>
-                            </div>
-                            <div v-if="info_interesado_selected" v-for="interes in intereses">
-                                <el-row style="margin-top: 20px;">
-                                    <el-col :span="16">{{ interes.carrera.facultad.nombre + ' - ' + interes.carrera.nombre }}</el-col>
-                                    <el-col :span="4"><el-button type="primary" size="mini" icon="el-icon-right" @click="cargarLlamadas(interes)"></el-button></el-col>
-                                    <el-col :span="4">
-                                        <el-popover
-                                            placement="right"
-                                            title="Cambiar estado interés"
-                                            width="400"
-                                            trigger="click">
-                                            <estados-interes :estado="interes.estado_interes" :interes="interes.id"></estados-interes>
-                                            <el-button slot="reference"
-                                                       :type="color_estado_interes(interes.estado_interes)"
-                                                       size="mini">
-                                                {{ label_estado_interes(interes.estado_interes) }}
-                                            </el-button>
-                                        </el-popover>
-                                    </el-col>
-                                </el-row>
-                            </div>
-                        </el-card>
+                    <el-col :span="10">
+                        <div style="margin-top: 20px">
+                            <el-radio-group v-model="filtros_interesados_report.estado" size="mini" @change="cambiarFiltroInteresado">
+                                <el-radio-button label="1">No contactado</el-radio-button>
+                                <el-radio-button label="2">Devolver llamada</el-radio-button>
+                            </el-radio-group>
+                        </div>
                     </el-col>
-                    <el-col :offset="2" :span="14">
-                        <el-card header="Historial de llamadas">
-                            <el-table :data="llamadas">
-                                <el-table-column prop="created_at"
-                                                 label="Fecha llamada">
-                                </el-table-column>
-                                <el-table-column label="Llamado por">
-                                    <template slot-scope="{ row }">
-                                        {{ row.usuario_llamada.name }}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="respuesta" label="Respuesta">
-                                </el-table-column>
-                            </el-table>
-                        </el-card>
+                    <el-col :span="10">
+                        <el-date-picker
+                            style="margin-top: 20px;"
+                            size="mini"
+                            v-model="rango_fecha_interesados"
+                            type="daterange"
+                            range-separator="Hasta"
+                            start-placeholder="Fecha inicial"
+                            end-placeholder="Fecha final"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
+                            @change="escogerRangoFechaInteresados"
+                            :clearable="false">
+                            <div slot="range-separator" style="padding: 0 18px;">
+                                <label>Hasta</label>
+                            </div>
+                        </el-date-picker>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-input
+                            @input="buscarFiltrado"
+                            style="margin-top: 20px"
+                            size="mini"
+                            placeholder="Búsqueda..."
+                            suffix-icon="el-icon-search"
+                            v-model="filtros_interesados_report.q">
+                        </el-input>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span="24">
+                            <el-table :data="interesados" v-if="interesados" style="max-height: calc(100vh - 40vh);" height="60vh" @cell-dblclick="procesarNuevaLlamada" row-class-name="fila_reporte_llamada">
+                                <el-table-column label="Interesado">
+                                    <template slot-scope="{ row }">
+                                        {{ row.persona.nombres }}<br/>
+                                        <el-tag size="mini">{{ row.persona.cedula }}</el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Telefonos">
+                                    <template slot-scope="{ row }">
+                                        <div v-for="contacto in row.persona.contactos">
+                                            {{ contacto.tipo_contacto.descripcion + ': ' }} <el-tag size="mini">{{ contacto.valor }}</el-tag>
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="" label="Facultad">
+                                    <template slot-scope="{ row }">
+                                            {{ row.carrera.facultad.nombre }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="" label="Carrera">
+                                    <template slot-scope="{ row }">
+                                            {{ row.carrera.nombre }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Última llamada">
+                                    <template slot-scope="{ row }">
+                                        {{ (row.ultima_llamada) ? row.ultima_llamada.created_at : '----' }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Observación">
+                                    <template slot-scope="{ row }">
+                                        {{ (row.ultima_llamada) ? row.ultima_llamada.observacion : '----' }}
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                    </el-col>
+                </el-row>
+                <br/>
             </template>
         </panel>
 
-        <el-dialog :visible.sync="nueva_llamada_modal_visible"
+        <el-dialog :visible.sync="nueva_llamada_modal_table_visible"
                    :close-on-click-modal="false"
-                   title="Ingreso de nueva llamada"
-                   @opened="modalLlamadaAbierto"
+                   title="Registrar llamada"
                    width="30%"
                    center>
-            <el-divider content-position="left">Llenar información de nueva llamada</el-divider>
+            <el-divider content-position="left">Llenar información</el-divider>
             <el-row style="text-align: center; padding-bottom: 20px;">
                 <el-col :span="10">
                     <label style="font-size: 18px;">Interesado: </label>
                 </el-col>
                 <el-col :offset="2" :span="10">
-                    <el-tag v-if="info_interesado_selected">
-                        {{ info_interesado_selected.cedula  + " - " + info_interesado_selected.nombres }}
+                    <el-tag v-if="info_interesado_table_selected">
+                        {{ info_interesado_table_selected.persona.cedula  + " - " + info_interesado_table_selected.persona.nombres }}
                     </el-tag>
-                    <!--<el-select v-model="info_interesado_busqueda_selected"
-                               filterable
-                               size="mini"
-                               placeholder="Buscar interesado...">
-                        <el-option
-                            v-for="item in info_list_interesados"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item">
-                        </el-option>
-                    </el-select>-->
                 </el-col>
             </el-row>
             <el-row style="text-align: center; padding-bottom: 20px;">
                 <el-col :span="10">
-                    <label style="font-size: 18px;">Intereses: </label>
+                    <label style="font-size: 18px;">Estado Interes: </label>
                 </el-col>
                 <el-col :offset="2" :span="10">
-                    <el-select v-model="interes_selected"
+                    <el-select v-model="interes_selected_table_selected"
                                filterable
-                               value-key="id"
+                               value-key="key"
                                size="mini"
-                               placeholder="Seleccionar interés...">
+                               placeholder="Seleccionar estado...">
                         <el-option
-                            v-for="item in intereses"
-                            :key="item.id"
-                            :label="item.carrera.facultad.nombre + ' - ' + item.carrera.nombre"
+                            v-for="(item, key) in intereses_table"
+                            :key="key"
+                            :label="item.value"
                             :value="item">
                         </el-option>
                     </el-select>
                 </el-col>
             </el-row>
-            <el-row style="text-align: center; padding-bottom: 20px;">
+            <el-row style="text-align: center; padding-bottom: 20px;" v-if="interes_selected_table_selected.key === 3">
                 <el-col :span="10">
-                    <label style="font-size: 18px;">Respuesta: </label>
+                    <label style="font-size: 18px;">¿Devolver llamada? </label>
                 </el-col>
                 <el-col :offset="2" :span="10">
-                    <el-select v-model="respuesta_selected"
-                               filterable
-                               size="mini"
-                               placeholder="Seleccionar respuesta...">
-                        <el-option
-                            v-for="item in info_list_respuestas"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item">
-                        </el-option>
-                    </el-select>
+                    <el-checkbox v-model="devolver_llamada_checked"> devolver</el-checkbox>
                 </el-col>
             </el-row>
             <el-row style="text-align: center; padding-bottom: 20px;">
@@ -153,12 +136,12 @@
                         type="textarea"
                         :rows="3"
                         placeholder="Escriba una observación..."
-                        v-model="nueva_llamada_observacion">
+                        v-model="nueva_llamada_observacion_table">
                     </el-input>
                 </el-col>
             </el-row>
             <el-row style="text-align: center; padding-bottom: 20px;">
-                <el-button type="primary" size="mini" icon="el-icon-plus" @click="agregarLlamada">Agregar Llamada</el-button>
+                <el-button type="primary" size="mini" icon="el-icon-plus" @click="agregarLlamadaTabla">Registrar información</el-button>
             </el-row>
         </el-dialog>
     </div>
@@ -167,6 +150,9 @@
 <script>
     import apiPersonas from "@api/personas";
     import apiLlamadas from "@api/llamadas";
+    import enumsRespuestasLlamadas from "../../../enums/respuestasLlamadas";
+    import enumsEstadosInteres from "../../../enums/estadosInteres";
+
     export default {
         name: "index",
         components: {
@@ -183,7 +169,24 @@
             ElInput: () => import("element-ui/lib/input"),
             EDivider: () => import("element-ui/lib/divider"),
             ElPopover: () => import("element-ui/lib/popover"),
-            EstadosInteres: () => import("../componentes/estados_interes")
+            ElDivider: () => import("element-ui/lib/divider"),
+            EstadosInteres: () => import("../componentes/estados_interes"),
+            ElDatePicker: () => import("element-ui/lib/date-picker")
+        },
+        async mounted(){
+          //Inicializar las fechas con las de hoy
+            this.rango_fecha = [
+                this.formatDate(new Date()),
+                this.formatDate(new Date(new Date().setDate(new Date().getDate() + 1)))
+            ];
+
+            this.rango_fecha_interesados = this.rango_fecha;
+
+            this.escogerRangoFechaLlamadas(this.rango_fecha);
+            this.escogerRangoFechaInteresados(this.rango_fecha);
+            /*let { data } = await apiPersonas.listadoIntereses(this.filtros_intereses_report);
+            console.log("Datos: ", data);
+            this.intereses_report = data;*/
         },
         data(){
             return {
@@ -191,38 +194,68 @@
                 info_interesado_loading: false,
                 interes_selected: null,
                 intereses: [],
+                intereses_table: [],
                 llamadas: [],
-                respuesta_selected: "SI",
+                interesados: [],
+                respuesta_selected: "2",
                 info_list_interesados: [],
-                info_list_respuestas: ["SI", "NO", "TALVEZ"],
+                info_list_respuestas: enumsRespuestasLlamadas.obtener_listado(),
                 nueva_llamada_modal_visible: false,
-                nueva_llamada_observacion: ""
+                nueva_llamada_observacion: "",
+                nueva_llamada_modal_table_visible: false,
+                info_interesado_table_selected: null,
+                interes_selected_table_selected: enumsEstadosInteres.obtenerEstadoInteresPorClave(3),
+                respuesta_selected_table: "2",
+                nueva_llamada_observacion_table: "",
+                intereses_report: [],
+                rango_fecha: null,
+                rango_fecha_interesados: null,
+                filtros_intereses_report: {
+                    estado: 1,
+                    fecha_desde: '',
+                    fecha_hasta: ''
+                },
+                filtros_interesados_report: {
+                    estado: 1,
+                    q: '',
+                    fecha_desde: '',
+                    fecha_hasta: ''
+                },
+                devolver_llamada_checked: false
             }
         },
         methods:{
             async modalLlamadaAbierto(){
                 //this.intereses = this.info_interesado_selected.intereses;
             },
-            async buscarPersona(valor){
-               let { data } = await apiPersonas.buscarPersona(valor);
-               this.info_list_interesados = data;
-            },
+            buscarFiltrado: _.debounce(function (){
+                this.recargarTablaInteresados();
+            }, 500),
+
             abrirModalNuevaLlamada(){
                 this.nueva_llamada_modal_visible = true;
             },
             historial_llamadas(valor){
-                this.intereses = valor.intereses;
+                if(valor){
+                    this.intereses = valor.intereses;
+                }else{
+                    this.intereses = [];
+                }
                 //console.log("Datos: ", valor);
             },
-            async agregarLlamada(){
-                console.log("Interes: ", this.interes_selected.id);
-                console.log("Respuesta: ", this.respuesta_selected);
+            async agregarLlamadaTabla(){
+                /*console.log("Id_interesado", this.info_interesado_table_selected.id);
+                console.log("Estado Interes: ", this.interes_selected_table_selected.key);
+                console.log("Respuesta: ", this.respuesta_selected_table);
+                console.log("Observacion: ", this.nueva_llamada_observacion_table);*/
+
                 let { data } = await apiLlamadas.agregarLlamada({
-                    id_interesado: this.interes_selected.id,
-                    respuesta: this.respuesta_selected,
-                    observacion: this.nueva_llamada_observacion
+                    id_interesado: this.info_interesado_table_selected.id,
+                    respuesta: this.interes_selected_table_selected.key,
+                    observacion: this.nueva_llamada_observacion_table,
+                    devolver_llamada: this.devolver_llamada_checked
                 });
-                this.nueva_llamada_modal_visible = false;
+                this.nueva_llamada_modal_table_visible = false;
                 if(data){
                     this.$notify.success({
                         title: 'Guardado exitoso!',
@@ -234,6 +267,9 @@
                         message: 'Error al ingresar la llamada al sistema'
                     });
                 }
+                this.intereses_table = enumsEstadosInteres.obtenerEstadoInteres();
+                this.nueva_llamada_observacion_table = "";
+                this.recargarTablaInteresados();
             },
             cargarLlamadas(interes){
                 this.llamadas = interes.llamadas;
@@ -273,7 +309,60 @@
                         break;
                 }
                 return label;
-            }
+            },
+            async escogerRangoFechaLlamadas(valor){
+                console.log("Valor rango: ", valor);
+                this.filtros_intereses_report.fecha_desde = valor[0];
+                this.filtros_intereses_report.fecha_hasta = valor[1];
+                let { data } = await apiPersonas.listadoIntereses(this.filtros_intereses_report);
+                console.log("Datos: ", data);
+                this.intereses_report = data;
+            },
+            async escogerRangoFechaInteresados(valor){
+                this.filtros_interesados_report.fecha_desde = valor[0];
+                this.filtros_interesados_report.fecha_hasta = valor[1];
+                this.recargarTablaInteresados()
+            },
+            formatDate(date){
+                var dd = date.getDate();
+                var mm = date.getMonth() + 1;
+
+                var yyyy = date.getFullYear();
+
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                return  yyyy + '-' + mm + '-' + dd;
+            },
+            obtenerEnumRespuestaLlamada(key){
+                return enumsRespuestasLlamadas.obtenerEstado(key);
+            },
+            async recargarTablaLlamadas(){
+                let { data } = await apiPersonas.listadoIntereses(this.filtros_intereses_report);
+                this.intereses_report = data;
+            },
+            async recargarTablaInteresados(){
+                let { data } = await apiPersonas.interesados(this.filtros_interesados_report);
+                this.interesados = data;
+            },
+            escogerFiltroEstado(valor){
+                this.filtros_intereses_report.estado = valor;
+                this.recargarTablaLlamadas();
+            },
+            procesarNuevaLlamada(row, column, cell, event){
+                this.intereses_table = [];
+                this.nueva_llamada_modal_table_visible = true;
+                this.devolver_llamada_checked = false;
+                this.info_interesado_table_selected = row;
+                this.intereses_table = enumsEstadosInteres.obtenerEstadoInteres();
+            },
+            cambiarFiltroInteresado(valor){
+                this.filtros_interesados_report.estado = valor;
+                this.recargarTablaInteresados();
+            },
         }
     }
 </script>
@@ -282,4 +371,26 @@
     #control_llamadas .el-row{
         margin-bottom: 20px;
     }
+
+    .fila_reporte_llamada:hover {
+        cursor: pointer;
+    }
+
+    .el-dialog__header {
+        padding-bottom: 2px;
+        background-color: black;
+    }
+
+    .el-dialog__title{
+        color: white;
+    }
+
+    .el-dialog__body{
+        padding-top: 2px;
+    }
+
+    .el-dialog__headerbtn .el-dialog__close{
+        color: white;
+    }
+
 </style>

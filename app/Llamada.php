@@ -15,6 +15,7 @@ class Llamada extends Model
         "inicio_llamada",
         "fin_llamada",
         "fecha_llamada",
+        'observacion',
         "respuesta",
         "utlima_llamada",
         "id_usuario_creador"
@@ -22,5 +23,9 @@ class Llamada extends Model
 
     public function usuario_llamada(){
         return $this->belongsTo(User::class, "id_usuario_llamada");
+    }
+
+    public function interesado(){
+        return $this->belongsTo(Interes::class, "id_interesado");
     }
 }

@@ -37,5 +37,9 @@ class UsersTableSeeder extends Seeder
 
         $user->id_origen = $origen->id;
         $user->saveOrFail();
+
+        \Bouncer::assign('Administrador')->to($user);
+        \Bouncer::allow($user)->everything();
+
     }
 }
