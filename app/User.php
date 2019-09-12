@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'name', 'email', 'password',
+        'username', 'name', 'email', 'password', 'id_origen'
     ];
 
     /**
@@ -42,5 +43,14 @@ class User extends Authenticatable
 
     public function getAllAbilities(){
         return $this->getAbilities()->pluck("name");
+    }
+
+    public function origen(){
+        return $this->belongsTo(Origen::class, "id_origen");
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }

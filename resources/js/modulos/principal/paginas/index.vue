@@ -37,6 +37,14 @@
                     <i class="el-icon-s-claim"></i>
                     <span>Reporte de Admisión</span>
                 </el-menu-item>
+                <el-menu-item :class="verificarPermisos('/usuarios') ? '' : 'ocultar'" index="6" @click="$router.push({ name: 'index-usuarios' })">
+                    <i class="el-icon-user"></i>
+                    <span>Usuarios</span>
+                </el-menu-item>
+                <el-menu-item :class="verificarPermisos('/plantilla') ? '' : 'ocultar'" index="7" @click="$router.push({ name: 'index-plantilla' })">
+                    <i class="el-icon-link"></i>
+                    <span>Plantilla Correo</span>
+                </el-menu-item>
                 <!--<el-menu-item index="6">
                     <i class="el-icon-s-claim"></i>
                     <span>Historico de Admisiones</span>
@@ -92,7 +100,7 @@
                 </el-row>
             </el-header>-->
             <el-main>
-                <seguidor-ruta :ruta="$route.path"></seguidor-ruta>
+                <!--<seguidor-ruta :ruta="$route.path"></seguidor-ruta>-->
                 <router-view></router-view>
             </el-main>
         </el-container>

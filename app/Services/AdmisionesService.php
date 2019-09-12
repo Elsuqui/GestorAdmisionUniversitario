@@ -5,7 +5,10 @@ namespace App\Services;
 
 
 use App\Enums\EstadosInteres;
+use App\Interes;
+use App\Persona;
 use App\Repository\AdmisionRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AdmisionesService
@@ -66,5 +69,21 @@ class AdmisionesService
             ->whereDate("created_at", "<=", $request->get("fecha_hasta"));
 
         return $intereses->with(["persona.intereses", "persona.contactos.tipoContacto", "carrera.facultad", "ultima_llamada"])->get();
+    }
+
+    public function reporteEstadosAdmision(){
+        $interesados = Interes::query()->where("estado_interes", "=", EstadosInteres::INTERESADO)->get()->count();
+        $no_interesados = Interes::query()->where("estado_interes", "=", EstadosInteres::NO_INTERESADO)->get()->count();
+        $en_carrera = Interes::query()->where("estado_interes", "=", EstadosInteres::EN_CARRERA)->get()->count();
+        return [$interesados, $no_interesados, $en_carrera];
+    }
+
+    public function reporteNumeroIngresados(){
+        $fecha_desde = Carbon::now()->subMonthsNoOverflow()->startOfMonth()->toDateString();
+        $fecha_hasta = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        return Persona::query()->where(function ($query) use($fecha_desde, $fecha_hasta){
+           $query->whereDate("created_at", ">=", $fecha_desde)
+               ->whereDate("created_at", "<=", $fecha_hasta);
+        })->get()->count();
     }
 }
