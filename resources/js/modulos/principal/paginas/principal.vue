@@ -9,7 +9,7 @@
             </el-col>
             <el-col :span="8" :offset="2">
                 <el-card>
-                    <div slot="header" style="text-align: center;"><label>Número de personas ingresadas el último mes</label></div>
+                    <div slot="header" style="text-align: center;"><label>Número de personas ingresadas este mes</label></div>
                     <div class="contador_personas">{{ contador_personas }}</div>
                 </el-card>
             </el-col>

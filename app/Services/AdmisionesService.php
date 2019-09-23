@@ -79,8 +79,10 @@ class AdmisionesService
     }
 
     public function reporteNumeroIngresados(){
-        $fecha_desde = Carbon::now()->subMonthsNoOverflow()->startOfMonth()->toDateString();
-        $fecha_hasta = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        /*$fecha_desde = Carbon::now()->subMonthsNoOverflow()->startOfMonth()->toDateString();
+        $fecha_hasta = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();*/
+        $fecha_desde = Carbon::now()->startOfMonth()->toDateString();
+        $fecha_hasta = Carbon::now()->endOfMonth()->toDateString();
         return Persona::query()->where(function ($query) use($fecha_desde, $fecha_hasta){
            $query->whereDate("created_at", ">=", $fecha_desde)
                ->whereDate("created_at", "<=", $fecha_hasta);

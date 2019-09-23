@@ -1,14 +1,14 @@
 <template>
     <div>
         <panel titulo="Configuración de plantilla" id="plantilla">
-            <div slot="content" style="max-height: calc(100vh - 40vh); height: 60vh;">
+            <div slot="content" style="max-height: calc(100vh - 40vh); height: 60vh;" v-loading="enviando_correo" element-loading-text="Enviando correos a interesados...">
                 <el-row>
                     <el-col :span="12">
                         <el-row>
                             <el-col :span="6">Asunto</el-col>
                             <el-col :span="18"><el-input v-model="plantilla.asunto"></el-input></el-col>
                         </el-row>
-                        <el-row style="margin-top: 25px;">
+                        <!--<el-row style="margin-top: 25px;">
                             <el-col :span="6">Cuerpo</el-col>
                             <el-col :offset="1" :span="7">
                                 <el-select v-model="tipo_adjunto_selected">
@@ -30,12 +30,13 @@
                             <el-col :offset="1" :span="1">
                                 <el-button type="success" circle size="mini" icon="el-icon-plus" @click="agregarContenido"></el-button>
                             </el-col>
-                        </el-row>
+                        </el-row>-->
                         <el-row style="margin-top: 25px;">
-                            <el-col v-if="tipo_adjunto_selected === 0">
-                                <el-input type="textarea" v-model="valor_area_texto"></el-input>
+                            <el-col :span="6">Contenido del mensaje</el-col>
+                            <el-col :span="18">
+                                <el-input :autosize="{ minRows: 5, maxRows: 10}" type="textarea" v-model="plantilla.cuerpo"></el-input>
                             </el-col>
-                            <el-col v-else>
+                            <!--<el-col v-else>
                                 <el-upload
                                     action=""
                                     list-type="picture-card"
@@ -51,12 +52,21 @@
                                 <el-dialog :visible.sync="dialogVisible">
                                     <img width="100%" :src="imagen_seleccionada" alt="">
                                 </el-dialog>
+                            </el-col>-->
+                        </el-row>
+                        <el-row style="margin-top: 25px;">
+                            <el-col :span="6">Pie de página</el-col>
+                            <el-col :span="18"><el-input :autosize="{ minRows: 5, maxRows: 10}" type="textarea" v-model="plantilla.pie"></el-input></el-col>
+                        </el-row>
+                        <el-row style="margin-top: 25px;">
+                            <el-col>
+                                <el-button :loading="enviando_correo" type="success" size="mini" icon="el-icon-plus" @click="agregarContenido">{{ estado_envio }}</el-button>
                             </el-col>
                         </el-row>
                     </el-col>
-                    <el-col :offset="2" :span="10">
+                    <!--<el-col :offset="2" :span="10">
 
-                    </el-col>
+                    </el-col>-->
                 </el-row>
             </div>
         </panel>
@@ -64,6 +74,7 @@
 </template>
 
 <script>
+    import apiMail from "@api/mail";
     export default {
         name: "index",
         components: {
@@ -86,9 +97,11 @@
             return {
                 plantilla: {
                     asunto: '',
-                    cuerpo: [],
-                    pie: []
+                    cuerpo: '',
+                    pie: ''
                 },
+                enviando_correo: false,
+                estado_envio: "Enviar correo masivo a interesados",
                 tipo_adjunto_selected: 0,
                 valor_area_texto: '',
                 imagen_seleccionada: null,
@@ -145,8 +158,32 @@
                 console.log("Res: ", res);
             },
 
-            agregarContenido(){
-                if(this.tipo_adjunto_selected === 0){
+            async agregarContenido(){
+                if(this.plantilla.cuerpo !== "" || this.plantilla.asunto !== ""){
+                    this.enviando_correo = true;
+                    let { data } = await apiMail.enviarMailPersonalizado(this.plantilla);
+                    if(data){
+                        this.enviando_correo = false;
+                        this.$notify({
+                            title: "Los correos fueron enviados correctamente",
+                            type: "success"
+                        });
+                    }else{
+                        this.enviando_correo = false;
+                        this.$notify({
+                            title: "Error al enviar los correos!!",
+                            type: "error"
+                        });
+                    }
+                }else{
+                    this.enviando_correo = false;
+                    this.$notify({
+                        title: "Los campos de Asunto y cuerpo del correo son obligatorios",
+                        type: "error"
+                    });
+                }
+
+                /*if(this.tipo_adjunto_selected === 0){
                     // Es texto
                     if(this.valor_area_texto !== ""){
                         this.plantilla.cuerpo.push({
@@ -167,7 +204,7 @@
                        orden: this.orden_selected,
                        valor: this.imagen_seleccionada
                     });
-                }
+                }*/
             },
 
             agregarImagen(file, fileList){
