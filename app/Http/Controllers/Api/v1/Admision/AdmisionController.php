@@ -26,4 +26,12 @@ class AdmisionController extends Controller
     public function cambiarEstadoInteres(Request $request){
         return response()->json($this->admisionService->cambiarEstadoInteres($request));
     }
+
+    public function reporteEstadosAdmision(){
+        return response()->json($this->admisionService->reporteEstadosAdmision());
+    }
+
+    public function reporteNumeroIngresados(){
+        return response()->json($this->admisionService->reporteNumeroIngresados());
+    }
 }

@@ -3,7 +3,7 @@
         <div slot="content">
             <el-row>
                 <el-col :span="10">
-                    <div style="margin-top: 20px">
+                    <div style="margin-top: 20px;">
                         <el-radio-group v-model="filtros_report.tipo_consulta" size="mini" @change="escogerFiltroEstado">
                             <el-radio-button label="1">Estudiante</el-radio-button>
                             <el-radio-button label="2">Operador</el-radio-button>
@@ -46,7 +46,7 @@
                 </el-col>
             </el-row>
 
-            <el-table style="max-height: calc(100vh - 25vh);" height="75vh" :data="llamadas_report" v-if="llamadas_report"
+            <el-table v-loading="cargando_llamadas_report" element-loading-text="Cargando reporte..." style="max-height: calc(100vh - 25vh);" height="75vh" :data="llamadas_report" v-if="llamadas_report"
                       :cell-class-name="obtenerColor">
                 <el-table-column prop="" label="Interesado">
                     <template slot-scope="{ row }">
@@ -134,6 +134,7 @@
                 },
                 rango_fecha: null,
                 llamadas_report: [],
+                cargando_llamadas_report: false
             }
         },
         methods:{
@@ -161,8 +162,10 @@
                 return  yyyy + '-' + mm + '-' + dd;
             },
             async recargarTabla(){
+                this.cargando_llamadas_report = true;
                 let { data } = await apiLlamadas.listadoLlamadas(this.filtros_report);
                 this.llamadas_report = data;
+                this.cargando_llamadas_report = false;
             },
             obtenerEnumRespuestaLlamada(key){
                 return enumsRespuestasLlamadas.obtenerEstado(key);

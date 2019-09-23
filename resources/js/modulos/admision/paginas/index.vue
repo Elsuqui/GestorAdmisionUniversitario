@@ -133,6 +133,7 @@
                                 title: 'Guardado exitoso!',
                                 message: 'El interés de admisión ha sido ingresado al sistema'
                             });
+                            this.$refs.form.resetFields();
                         }else{
                             this.$notify.error({
                                 title: 'Guardado fallido!',

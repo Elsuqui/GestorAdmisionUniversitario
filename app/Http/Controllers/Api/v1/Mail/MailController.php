@@ -22,4 +22,8 @@ class MailController extends Controller
     public function enviarMailInformativo(Request $request){
         return response()->json($this->mailService->enviarEmailInformativo(collect($request->all())));
     }
+
+    public function enviarMailPersonalizado(Request $request){
+        return response()->json($this->mailService->enviarMailPersonalizado($request->get("mail")));
+    }
 }

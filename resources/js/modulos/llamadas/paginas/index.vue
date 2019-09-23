@@ -43,7 +43,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                            <el-table :data="interesados" v-if="interesados" style="max-height: calc(100vh - 40vh);" height="60vh" @cell-dblclick="procesarNuevaLlamada" row-class-name="fila_reporte_llamada">
+                            <el-table :data="interesados" v-loading="cargando_interesados" element-loading-text="Cargando interesados..." style="max-height: calc(100vh - 40vh);" height="60vh" @cell-dblclick="procesarNuevaLlamada" row-class-name="fila_reporte_llamada">
                                 <el-table-column label="Interesado">
                                     <template slot-scope="{ row }">
                                         {{ row.persona.nombres }}<br/>
@@ -221,7 +221,8 @@
                     fecha_desde: '',
                     fecha_hasta: ''
                 },
-                devolver_llamada_checked: false
+                devolver_llamada_checked: false,
+                cargando_interesados: false
             }
         },
         methods:{
@@ -314,9 +315,10 @@
                 console.log("Valor rango: ", valor);
                 this.filtros_intereses_report.fecha_desde = valor[0];
                 this.filtros_intereses_report.fecha_hasta = valor[1];
-                let { data } = await apiPersonas.listadoIntereses(this.filtros_intereses_report);
+                this.recargarTablaLlamadas();
+                /*let { data } = await apiPersonas.listadoIntereses(this.filtros_intereses_report);
                 console.log("Datos: ", data);
-                this.intereses_report = data;
+                this.intereses_report = data;*/
             },
             async escogerRangoFechaInteresados(valor){
                 this.filtros_interesados_report.fecha_desde = valor[0];
@@ -345,8 +347,10 @@
                 this.intereses_report = data;
             },
             async recargarTablaInteresados(){
+                this.cargando_interesados = true;
                 let { data } = await apiPersonas.interesados(this.filtros_interesados_report);
                 this.interesados = data;
+                this.cargando_interesados = false;
             },
             escogerFiltroEstado(valor){
                 this.filtros_intereses_report.estado = valor;

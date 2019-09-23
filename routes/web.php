@@ -20,6 +20,9 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::post("/ingresar", "Auth\LoginController@ingresar")->name("ingresar");
+Route::get("/not-found", function (){
+   return view("layouts.404");
+});
 
 // Grupo de Rutas para
 Route::middleware(["web", "auth"])->group(function (){

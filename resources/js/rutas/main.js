@@ -11,6 +11,8 @@ import archivos from "../rutas/modulos/archivos";
 import reportes from "../rutas/modulos/reportes";
 import mail from "../rutas/modulos/mail";
 import llamadas from "../rutas/modulos/llamadas";
+import usuarios from "../rutas/modulos/usuarios";
+import plantillas from "./modulos/plantillas";
 
 // Instancio el objeto ruteador con las rutas definidas
 const router = new Router({
@@ -26,7 +28,9 @@ const router = new Router({
         archivos,
         mail,
         reportes,
-        llamadas
+        llamadas,
+        usuarios,
+        plantillas,
     ]
 });
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Silber\Bouncer\Bouncer;
 
 class RolesPermissionSeeder extends Seeder
 {
@@ -17,9 +18,14 @@ class RolesPermissionSeeder extends Seeder
         \Bouncer::assign('Administrador')->to($user);
         \Bouncer::allow($user)->everything();
 
-        \Bouncer::role()->firstOrCreate([
+        $operador = \Bouncer::role()->firstOrCreate([
             'name' => 'Operador',
             'title' => 'Usuario operador',
         ]);
+
+        \Bouncer::allow($operador)->to('ver-/admision');
+        \Bouncer::allow($operador)->to('ver-/mail');
+        \Bouncer::allow($operador)->to('ver-/llamadas');
+
     }
 }

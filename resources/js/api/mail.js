@@ -16,5 +16,8 @@ export default {
     },
     async enviarMailInformativo(datos){
         return await axios.post(url_base + "/enviar-mail-informativo", datos);
+    },
+    async enviarMailPersonalizado(mail){
+        return await axios.post(url_base + "/enviar-mail-personalizado", { mail: mail });
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="limiter">
         <div class="container-login100">
-            <div class="wrap-login100 p-t-190 p-b-30">
+            <div class="wrap-login100 p-t-50 p-b-30">
                 <form class="login100-form validate-form">
 
                     <div class="login100-form-avatar">
@@ -46,17 +46,17 @@
                     </div>
 
                     <div class="text-center w-full p-t-25 p-b-230">
-                        <a href="#" class="txt1">
+                        <a href="/password/reset" class="txt1">
                             Olvidó su usuario / contraseña?
                         </a>
                     </div>
 
-                    <div class="text-center w-full">
+                    <!--<div class="text-center w-full">
                         <a class="txt1" href="#">
                             Registrarse
                             <i class="fa fa-long-arrow-right"></i>
                         </a>
-                    </div>
+                    </div>-->
                 </form>
             </div>
         </div>

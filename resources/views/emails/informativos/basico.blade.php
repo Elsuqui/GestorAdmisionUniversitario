@@ -12,7 +12,7 @@ La facultad de <strong>{{ $data["facultad"] }}</strong>
 tiene el agrado de comunicarse con usted para que pueda conocer más acerca
 de la carrera, pulsando el siguiente link:
 
-@component('mail::button', ['url' => route("ingresar")])
+@component('mail::button', ['url' => "https://www.ucsg.edu.ec/"])
 Ver información
 @endcomponent
 

@@ -8,5 +8,11 @@ export default {
     },
     async cambiarEstadoInteres(datos){
         return await axios.post(this.url() + "/cambiar-estado-interes", datos);
+    },
+    async reporteAdmision(){
+        return await axios.get(this.url() + "/reporte-admision");
+    },
+    async reporteNumeroIngresados(){
+        return await axios.get(this.url() + "/reporte-numero-ingresados");
     }
 }

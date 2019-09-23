@@ -43,3 +43,13 @@ Route::prefix("v1/llamadas")
     ->namespace('Api\v1\Llamada')
     ->as('api.v1.llamada')
     ->group(base_path('routes/api/v1/llamadas/llamadas.php'));
+
+Route::prefix("v1/usuarios")
+    ->namespace('Api\v1\Usuario')
+    ->as('api.v1.usuarios')
+    ->group(base_path('routes/api/v1/usuarios/usuarios.php'));
+
+Route::prefix("v1/origenes")
+    ->namespace('Api\v1\Origen')
+    ->as('api.v1.origenes')
+    ->group(base_path('routes/api/v1/origenes/origenes.php'));

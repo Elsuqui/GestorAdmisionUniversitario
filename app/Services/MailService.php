@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Enums\EstadosInteres;
 use App\Interes;
 use App\Mail\EmailInformativo;
+use App\Mail\EmailMasivoInformacion;
+use App\Mail\EmailPersonalizado;
 use App\Repository\PersonaRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -78,5 +80,29 @@ class MailService
                 }
             }
         });
+    }
+
+    public function enviarMailPersonalizado(array $datos){
+        try{
+            $interesados = Interes::query()->where("estado_interes", "=", EstadosInteres::INTERESADO)
+                ->with(["persona.contactos" => function($query) {
+                    $query->where("contactos.id_tipo_contacto", "=", 3);
+                }])
+                ->get();
+
+            foreach($interesados as $interesado){
+                $mail = $interesado["persona"]["contactos"]->first();
+                if(!is_null($mail)){
+                    $datos["interesado"] = $interesado["persona"]["nombres"];
+                    //Mail::to($mail->valor)->queue(new EmailPersonalizado($datos));
+                    Mail::to($mail->valor)->queue(new EmailMasivoInformacion($datos));
+                }
+            }
+
+            return true;
+        }catch(\Exception $exception){
+            dd($exception->getMessage());
+            return false;
+        }
     }
 }

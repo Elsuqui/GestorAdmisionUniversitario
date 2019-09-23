@@ -38,7 +38,9 @@
             <el-table :data="listado"
                       border
                       size="medium"
-                      :cell-style="obtenerColor">
+                      :cell-style="obtenerColor"
+                      v-loading="cargando_correos"
+                      element-loading-text="Cargando correos...">
                 <el-table-column prop="" label="Interesado">
                         <template slot-scope="scope">
                             {{ scope.row.nombres }}<br/>
@@ -105,7 +107,8 @@
                     fecha_desde: null,
                     fecha_hasta: null,
                 },
-                rango_fecha: null
+                rango_fecha: null,
+                cargando_correos: false
             }
         },
         async mounted(){
@@ -142,8 +145,10 @@
                 this.actualizarTabla();
             },
             async actualizarTabla(){
+                this.cargando_correos = true;
                 let { data } = await apiMail.listadoPersonasInteresadas(this.filtros_report_mail);
                 this.listado = data;
+                this.cargando_correos = false;
             },
             async escogerRangoFecha(valor){
                 this.filtros_report_mail.fecha_desde = valor[0];
